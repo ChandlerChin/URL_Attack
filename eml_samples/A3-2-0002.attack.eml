@@ -1,0 +1,13 @@
+From: redacted@example.com
+To: redacted@example.com
+Subject: Link sample A3-2-0002
+Message-ID: <19c13d084dd534e6f1b67f2bdf1981acc486da086b6e43e4cc4f830fd23b8e3d@artifact.invalid>
+X-Pair-Id: A3-2-0002
+X-Attack-Pattern: A3-2
+MIME-Version: 1.0
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
+
+PHA+PGEgaHJlZj0iaHR0cHM6Ly90cnVzdGVkdHJ1c3RlZHRydXN0ZWQuY29tLyI+aHR0cHM6Ly90
+cnVzdGVkdHJ1c3RlZHRydXN0ZWQuY29tLzwvYT48L3A+PHA+UGxlYXNlIHJldmlldyB0aGUgbGlu
+ayBhYm92ZS48L3A+
