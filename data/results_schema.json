@@ -1,0 +1,400 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Paired trial record; no measurement values supplied",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "run_id",
+    "pair_id",
+    "entry_id",
+    "pattern",
+    "technique",
+    "mr",
+    "target_id",
+    "client",
+    "phase",
+    "started_utc",
+    "execution_status",
+    "verdict",
+    "error"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "pair_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "entry_id": {
+      "type": "string",
+      "pattern": "^A[1-7](?:-[1-6])?-\\d{4,5}$"
+    },
+    "pattern": {
+      "type": "string"
+    },
+    "technique": {
+      "enum": [
+        "A1",
+        "A2",
+        "A3",
+        "A4",
+        "A5",
+        "A6",
+        "A7"
+      ]
+    },
+    "mr": {
+      "enum": [
+        "MR1",
+        "MR2",
+        "MR3"
+      ]
+    },
+    "target_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "client": {
+      "type": "string",
+      "minLength": 1
+    },
+    "seg_product": {
+      "type": "string"
+    },
+    "phase": {
+      "enum": [
+        "measurement",
+        "confirmation"
+      ]
+    },
+    "started_utc": {
+      "type": "string"
+    },
+    "execution_status": {
+      "enum": [
+        "completed",
+        "not_run",
+        "error"
+      ]
+    },
+    "verdict": {
+      "enum": [
+        null,
+        "success",
+        "limited",
+        "unsuccessful"
+      ]
+    },
+    "error": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "observations": {
+      "type": "object"
+    },
+    "reason": {
+      "type": "string"
+    },
+    "runtime": {
+      "type": "object",
+      "description": "Environment metadata supplied by private external configuration, not inferred from the startup host."
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "execution_status": {
+            "const": "completed"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "observations",
+          "reason"
+        ],
+        "properties": {
+          "verdict": {
+            "enum": [
+              "success",
+              "limited",
+              "unsuccessful"
+            ]
+          },
+          "error": {
+            "type": "null"
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "verdict": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "mr": {
+            "enum": [
+              "MR1",
+              "MR2"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "verdict": {
+            "enum": [
+              null,
+              "success",
+              "unsuccessful"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "execution_status": {
+            "const": "completed"
+          },
+          "mr": {
+            "const": "MR1"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "observations": {
+            "$ref": "#/$defs/mr1_observations"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "execution_status": {
+            "const": "completed"
+          },
+          "mr": {
+            "const": "MR2"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "observations": {
+            "$ref": "#/$defs/mr2_observations"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "execution_status": {
+            "const": "completed"
+          },
+          "mr": {
+            "const": "MR3"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "observations": {
+            "$ref": "#/$defs/mr3_observations"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "mr1_observations": {
+      "type": "object",
+      "required": [
+        "expected_destination",
+        "reference",
+        "attack"
+      ],
+      "properties": {
+        "expected_destination": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reference": {
+          "type": "object",
+          "required": [
+            "seg_rewritten"
+          ],
+          "properties": {
+            "seg_rewritten": {
+              "type": "boolean"
+            }
+          }
+        },
+        "attack": {
+          "type": "object",
+          "required": [
+            "seg_rewritten",
+            "client_link_generated",
+            "transport_preserved",
+            "reaches_expected_destination"
+          ],
+          "properties": {
+            "reaches_expected_destination": {
+              "type": "boolean"
+            },
+            "actual_navigation_url": {
+              "type": "string",
+              "minLength": 1
+            },
+            "seg_rewritten": {
+              "type": "boolean"
+            },
+            "client_link_generated": {
+              "type": "boolean"
+            },
+            "transport_preserved": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "mr2_observations": {
+      "type": "object",
+      "required": [
+        "expected_destination",
+        "reference",
+        "attack"
+      ],
+      "properties": {
+        "expected_destination": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reference": {
+          "type": "object",
+          "required": [
+            "warning_shown",
+            "link_openable"
+          ],
+          "properties": {
+            "warning_shown": {
+              "type": "boolean"
+            },
+            "link_openable": {
+              "type": "boolean"
+            }
+          }
+        },
+        "attack": {
+          "type": "object",
+          "required": [
+            "warning_shown",
+            "link_openable",
+            "reaches_expected_destination"
+          ],
+          "properties": {
+            "reaches_expected_destination": {
+              "type": "boolean"
+            },
+            "actual_navigation_url": {
+              "type": "string",
+              "minLength": 1
+            },
+            "warning_shown": {
+              "type": "boolean"
+            },
+            "link_openable": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "mr3_observations": {
+      "type": "object",
+      "required": [
+        "expected_destination",
+        "resolved_href_ref",
+        "resolved_href_att",
+        "reaches_expected_destination",
+        "has_warning_dialog",
+        "body_md5_ref",
+        "body_md5_att",
+        "warning_md5_ref",
+        "warning_md5_att"
+      ],
+      "properties": {
+        "reaches_expected_destination": {
+          "type": "boolean"
+        },
+        "actual_navigation_url": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expected_destination": {
+          "type": "string",
+          "minLength": 1
+        },
+        "resolved_href_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "resolved_href_att": {
+          "type": "string",
+          "minLength": 1
+        },
+        "has_warning_dialog": {
+          "type": "boolean"
+        },
+        "body_md5_ref": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{32}$"
+        },
+        "body_md5_att": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{32}$"
+        },
+        "warning_md5_ref": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-fA-F]{32}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "warning_md5_att": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-fA-F]{32}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

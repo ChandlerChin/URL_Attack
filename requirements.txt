@@ -1,0 +1,3 @@
+# Offline core uses the standard library; image comparison/tests need Pillow.
+# Local verification: Python 3.12.14, Pillow 12.3.0. Other versions not tested here.
+Pillow>=9.0
